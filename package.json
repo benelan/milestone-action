@@ -1,6 +1,6 @@
 {
-  "name": "milestone-pr-action",
-  "version": "0.0.0",
+  "name": "milestone-action",
+  "version": "1.0.0",
   "private": true,
   "description": "A GitHub Action to automatically set the current milestone on issues and pull requests.",
   "main": "lib/main.js",
@@ -16,14 +16,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/benelan/milestone-pr-action"
+    "url": "git+https://github.com/benelan/milestone-action"
   },
   "keywords": [
     "actions",
     "node",
-    "milestone"
+    "milestone",
+    "automation"
   ],
-  "author": "",
+  "author": "Ben Elan",
   "license": "MIT",
   "dependencies": {
     "@actions/core": "^1.4.0",
