@@ -1,4 +1,4 @@
-name: 'Add Current Milestone'
+name: 'add-current-milestone'
 on:
   issues:
     types: [opened]
