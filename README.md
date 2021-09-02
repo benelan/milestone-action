@@ -7,7 +7,8 @@ This action adds the current milestone to an issue or pull request. It chooses t
 ```yml
 # .github/workflows/add-milestone.yml
 name: Add Milestone
-issues:
+on:
+  issues:
     types: [opened]
     branches: [ master ]
   pull_request:
