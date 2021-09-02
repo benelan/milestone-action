@@ -1,6 +1,6 @@
 # Add Milestone By Due Date
 
-This action adds a the current milestone to an issue or pull request. It chooses the milestone that expires soonest, excluding those that already expired, based on the datetime that the action is run. You can see a successful test run [here](https://github.com/benelan/milestone-action/issues/8).
+This action adds the current milestone to an issue or pull request. It chooses the milestone that expires soonest, excluding those that already expired, based on the datetime that the action is run. You can see a successful test run [here](https://github.com/benelan/milestone-action/issues/8).
 
 
 ## Usage
