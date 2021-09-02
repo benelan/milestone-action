@@ -1,29 +1,23 @@
 # Add Milestone By Due Date
 
-This action adds a the current milestone to an issue or pull request. It chooses the milestone that expires soonest, excluding those that already expired, based on the datetime that the action is run.
+This action adds a the current milestone to an issue or pull request. It chooses the milestone that expires soonest, excluding those that already expired, based on the datetime that the action is run. You can see a successful test run [here](https://github.com/benelan/milestone-action/issues/8).
 
-## Code in Main
 
-> First, you'll need to have a reasonably modern version of `node` handy. This won't work with versions older than 9, for instance.
-
-Install the dependencies  
-```bash
-$ npm install
-```
-
-Build the typescript and package it for distribution
-```bash
-$ npm run build && npm run package
-```
-
-Run the tests :heavy_check_mark:  
-```bash
-$ npm test
-
- PASS  ./index.test.js
-  ✓ throws invalid number (3ms)
-  ✓ wait 500 ms (504ms)
-  ✓ test runs (95ms)
-
-...
+## Usage
+```yml
+# .github/workflows/add-milestone.yml
+name: Add Milestone
+issues:
+    types: [opened]
+    branches: [ master ]
+  pull_request:
+    types: [opened]
+    branches: [ master ]
+jobs:
+  add:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: benelan/milestone-action@v1.0.0
+        with:
+          github_token: "${{ secrets.GITHUB_TOKEN }}"
 ```
