@@ -9,10 +9,10 @@ This action adds the current milestone to an issue or pull request. It chooses t
 name: Add Milestone
 on:
   issues:
-    types: [opened]
+    types: [ opened ]
     branches: [ master ]
   pull_request:
-    types: [opened]
+    types: [ opened ]
     branches: [ master ]
 jobs:
   add:
