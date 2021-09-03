@@ -1,6 +1,6 @@
 # Add Milestone By Due Date
 
-This action adds the current milestone to an issue or pull request. It chooses the milestone that expires soonest, excluding those that already expired, based on the datetime that the action is run. You can see a successful test run [here](https://github.com/benelan/milestone-action/issues/8).
+This action adds the current or farthest due milestone to issues and pull requests. The current milestone is the one due the soonest, excluding milestones that are past due, based on the datetime that the action is run. You can see a successful test run [here](https://github.com/benelan/milestone-action/issues/8).
 
 
 ## Usage
@@ -21,4 +21,5 @@ jobs:
       - uses: benelan/milestone-action@v1.0.0
         with:
           github_token: "${{ secrets.GITHUB_TOKEN }}"
+          farthest: true # remove this line to add the current milestone
 ```

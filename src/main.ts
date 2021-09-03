@@ -24,6 +24,7 @@ async function run(): Promise<void> {
       return
     }
 
+    const farthest = core.getBooleanInput('farthest')
     const myToken = core.getInput('github_token')
     const client = github.getOctokit(myToken)
 
@@ -31,11 +32,11 @@ async function run(): Promise<void> {
       ...repo,
       state: 'open',
       sort: 'due_on',
-      direction: 'asc'
+      direction: farthest ? 'desc' : 'asc'
     })
 
     if (milestones.data.length === 0) {
-      console.log('There are no milestones, skipping.')
+      console.log('There are no open milestones in this repo, skipping.')
       return
     }
 
@@ -52,8 +53,10 @@ async function run(): Promise<void> {
         return
       }
     }
-  } catch (e) {
-    core.setFailed(e.message)
+  } catch (e: unknown) {
+    if (e instanceof Error) {
+      core.setFailed(e.message)
+    }
   }
 }
 
