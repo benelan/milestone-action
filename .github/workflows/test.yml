@@ -14,4 +14,4 @@ jobs:
       - uses: ./
         with:
           github_token: "${{ secrets.GITHUB_TOKEN }}"
-          farthest: true
+          farthest: true # remove this line to add the current milestone

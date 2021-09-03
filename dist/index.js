@@ -54,11 +54,12 @@ function run() {
                 console.log('The issue or pull request already has a milestone, skipping.');
                 return;
             }
+            const farthest = core.getBooleanInput('farthest');
             const myToken = core.getInput('github_token');
             const client = github.getOctokit(myToken);
-            const milestones = yield client.rest.issues.listMilestones(Object.assign(Object.assign({}, repo), { state: 'open', sort: 'due_on', direction: 'asc' }));
+            const milestones = yield client.rest.issues.listMilestones(Object.assign(Object.assign({}, repo), { state: 'open', sort: 'due_on', direction: farthest ? 'desc' : 'asc' }));
             if (milestones.data.length === 0) {
-                console.log('There are no milestones, skipping.');
+                console.log('There are no open milestones in this repo, skipping.');
                 return;
             }
             const currentDate = new Date();
@@ -71,7 +72,9 @@ function run() {
             }
         }
         catch (e) {
-            core.setFailed(e.message);
+            if (e instanceof Error) {
+                core.setFailed(e.message);
+            }
         }
     });
 }
