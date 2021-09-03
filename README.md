@@ -18,7 +18,7 @@ jobs:
   add:
     runs-on: ubuntu-latest
     steps:
-      - uses: benelan/milestone-action@v1.0.0
+      - uses: benelan/milestone-action@v1.0.1
         with:
           github_token: "${{ secrets.GITHUB_TOKEN }}"
           farthest: true # remove this line to add the current milestone
