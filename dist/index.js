@@ -6,25 +6,6 @@ require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 
 "use strict";
 
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -35,45 +16,44 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const core = __importStar(__nccwpck_require__(186));
-const github = __importStar(__nccwpck_require__(438));
+const github_1 = __nccwpck_require__(438);
+const core_1 = __nccwpck_require__(186);
 function run() {
-    var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const { repo, payload, issue } = github.context;
-            if (payload.action !== 'opened') {
-                console.log('No issue or pull request was opened, skipping');
+            const { repo, payload: { action, issue, pull_request }, issue: { number: issue_number } } = github_1.context;
+            if (action !== 'opened') {
+                console.log('No issue or pull request was opened, ending run');
                 return;
             }
-            if (!payload.issue && !payload.pull_request) {
-                console.log('The event that triggered this action was not a pull request or issue, skipping.');
+            if (!issue && !pull_request) {
+                console.log('The event that triggered this action was not a pull request or issue, ending run.');
                 return;
             }
-            if (!!((_a = payload.issue) === null || _a === void 0 ? void 0 : _a.milestone) || !!((_b = payload.pull_request) === null || _b === void 0 ? void 0 : _b.milestone)) {
-                console.log('The issue or pull request already has a milestone, skipping.');
+            if (!!(issue === null || issue === void 0 ? void 0 : issue.milestone) || !!(pull_request === null || pull_request === void 0 ? void 0 : pull_request.milestone)) {
+                console.log('The issue or pull request already has a milestone, ending run.');
                 return;
             }
-            const farthest = core.getBooleanInput('farthest');
-            const myToken = core.getInput('github_token');
-            const client = github.getOctokit(myToken);
-            const milestones = yield client.rest.issues.listMilestones(Object.assign(Object.assign({}, repo), { state: 'open', sort: 'due_on', direction: farthest ? 'desc' : 'asc' }));
-            if (milestones.data.length === 0) {
+            const farthest = (0, core_1.getBooleanInput)('farthest');
+            const token = (0, core_1.getInput)('repo-token');
+            const octokit = (0, github_1.getOctokit)(token);
+            const { data: milestones } = yield octokit.rest.issues.listMilestones(Object.assign(Object.assign({}, repo), { state: 'open', sort: 'due_on', direction: farthest ? 'desc' : 'asc' }));
+            if (milestones.length === 0) {
                 console.log('There are no open milestones in this repo, skipping.');
                 return;
             }
             const currentDate = new Date();
-            for (const milestone of milestones.data) {
+            for (const milestone of milestones) {
                 if (milestone.due_on && new Date(milestone.due_on) > currentDate) {
-                    yield client.rest.issues.update(Object.assign(Object.assign({}, repo), { issue_number: issue.number, milestone: milestone.number }));
-                    core.setOutput('milestone', milestone);
+                    yield octokit.rest.issues.update(Object.assign(Object.assign({}, repo), { issue_number, milestone: milestone.number }));
+                    (0, core_1.setOutput)('milestone', milestone);
                     return;
                 }
             }
         }
         catch (e) {
             if (e instanceof Error) {
-                core.setFailed(e.message);
+                (0, core_1.setFailed)(e.message);
             }
         }
     });
@@ -109,7 +89,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.issue = exports.issueCommand = void 0;
-const os = __importStar(__nccwpck_require__(87));
+const os = __importStar(__nccwpck_require__(365));
 const utils_1 = __nccwpck_require__(278);
 /**
  * Commands
@@ -216,11 +196,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getState = exports.saveState = exports.group = exports.endGroup = exports.startGroup = exports.info = exports.warning = exports.error = exports.debug = exports.isDebug = exports.setFailed = exports.setCommandEcho = exports.setOutput = exports.getBooleanInput = exports.getMultilineInput = exports.getInput = exports.addPath = exports.setSecret = exports.exportVariable = exports.ExitCode = void 0;
+exports.getState = exports.saveState = exports.group = exports.endGroup = exports.startGroup = exports.info = exports.notice = exports.warning = exports.error = exports.debug = exports.isDebug = exports.setFailed = exports.setCommandEcho = exports.setOutput = exports.getBooleanInput = exports.getMultilineInput = exports.getInput = exports.addPath = exports.setSecret = exports.exportVariable = exports.ExitCode = void 0;
 const command_1 = __nccwpck_require__(351);
 const file_command_1 = __nccwpck_require__(717);
 const utils_1 = __nccwpck_require__(278);
-const os = __importStar(__nccwpck_require__(87));
+const os = __importStar(__nccwpck_require__(365));
 const path = __importStar(__nccwpck_require__(622));
 /**
  * The code to exit an action
@@ -394,19 +374,30 @@ exports.debug = debug;
 /**
  * Adds an error issue
  * @param message error issue message. Errors will be converted to string via toString()
+ * @param properties optional properties to add to the annotation.
  */
-function error(message) {
-    command_1.issue('error', message instanceof Error ? message.toString() : message);
+function error(message, properties = {}) {
+    command_1.issueCommand('error', utils_1.toCommandProperties(properties), message instanceof Error ? message.toString() : message);
 }
 exports.error = error;
 /**
- * Adds an warning issue
+ * Adds a warning issue
  * @param message warning issue message. Errors will be converted to string via toString()
+ * @param properties optional properties to add to the annotation.
  */
-function warning(message) {
-    command_1.issue('warning', message instanceof Error ? message.toString() : message);
+function warning(message, properties = {}) {
+    command_1.issueCommand('warning', utils_1.toCommandProperties(properties), message instanceof Error ? message.toString() : message);
 }
 exports.warning = warning;
+/**
+ * Adds a notice issue
+ * @param message notice issue message. Errors will be converted to string via toString()
+ * @param properties optional properties to add to the annotation.
+ */
+function notice(message, properties = {}) {
+    command_1.issueCommand('notice', utils_1.toCommandProperties(properties), message instanceof Error ? message.toString() : message);
+}
+exports.notice = notice;
 /**
  * Writes info to log with console.log.
  * @param message info message
@@ -513,7 +504,7 @@ exports.issueCommand = void 0;
 // We use any as a valid input type
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const fs = __importStar(__nccwpck_require__(747));
-const os = __importStar(__nccwpck_require__(87));
+const os = __importStar(__nccwpck_require__(365));
 const utils_1 = __nccwpck_require__(278);
 function issueCommand(command, message) {
     const filePath = process.env[`GITHUB_${command}`];
@@ -540,7 +531,7 @@ exports.issueCommand = issueCommand;
 // We use any as a valid input type
 /* eslint-disable @typescript-eslint/no-explicit-any */
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.toCommandValue = void 0;
+exports.toCommandProperties = exports.toCommandValue = void 0;
 /**
  * Sanitizes an input into a string so it can be passed into issueCommand safely
  * @param input input to sanitize into a string
@@ -555,11 +546,30 @@ function toCommandValue(input) {
     return JSON.stringify(input);
 }
 exports.toCommandValue = toCommandValue;
+/**
+ *
+ * @param annotationProperties
+ * @returns The command properties to send with the actual annotation command
+ * See IssueCommandProperties: https://github.com/actions/runner/blob/main/src/Runner.Worker/ActionCommandManager.cs#L646
+ */
+function toCommandProperties(annotationProperties) {
+    if (!Object.keys(annotationProperties).length) {
+        return {};
+    }
+    return {
+        title: annotationProperties.title,
+        line: annotationProperties.startLine,
+        endLine: annotationProperties.endLine,
+        col: annotationProperties.startColumn,
+        endColumn: annotationProperties.endColumn
+    };
+}
+exports.toCommandProperties = toCommandProperties;
 //# sourceMappingURL=utils.js.map
 
 /***/ }),
 
-/***/ 53:
+/***/ 87:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -567,7 +577,7 @@ exports.toCommandValue = toCommandValue;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Context = void 0;
 const fs_1 = __nccwpck_require__(747);
-const os_1 = __nccwpck_require__(87);
+const os_1 = __nccwpck_require__(365);
 class Context {
     /**
      * Hydrate the context from the environment
@@ -646,7 +656,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getOctokit = exports.context = void 0;
-const Context = __importStar(__nccwpck_require__(53));
+const Context = __importStar(__nccwpck_require__(87));
 const utils_1 = __nccwpck_require__(30);
 exports.context = new Context.Context();
 /**
@@ -739,7 +749,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getOctokitOptions = exports.GitHub = exports.context = void 0;
-const Context = __importStar(__nccwpck_require__(53));
+const Context = __importStar(__nccwpck_require__(87));
 const Utils = __importStar(__nccwpck_require__(914));
 // octokit + plugins
 const core_1 = __nccwpck_require__(762);
@@ -6278,7 +6288,7 @@ module.exports = require("net");
 
 /***/ }),
 
-/***/ 87:
+/***/ 365:
 /***/ ((module) => {
 
 "use strict";

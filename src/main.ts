@@ -1,61 +1,64 @@
-import * as core from '@actions/core'
-import * as github from '@actions/github'
+import {context, getOctokit} from '@actions/github'
+import {getBooleanInput, getInput, setFailed, setOutput} from '@actions/core'
 
 async function run(): Promise<void> {
   try {
-    const {repo, payload, issue} = github.context
+    const {
+      repo,
+      payload: {action, issue, pull_request},
+      issue: {number: issue_number}
+    } = context
 
-    if (payload.action !== 'opened') {
-      console.log('No issue or pull request was opened, skipping')
+    if (action !== 'opened') {
+      console.log('No issue or pull request was opened, ending run')
       return
     }
 
-    if (!payload.issue && !payload.pull_request) {
+    if (!issue && !pull_request) {
       console.log(
-        'The event that triggered this action was not a pull request or issue, skipping.'
+        'The event that triggered this action was not a pull request or issue, ending run.'
       )
       return
     }
 
-    if (!!payload.issue?.milestone || !!payload.pull_request?.milestone) {
+    if (!!issue?.milestone || !!pull_request?.milestone) {
       console.log(
-        'The issue or pull request already has a milestone, skipping.'
+        'The issue or pull request already has a milestone, ending run.'
       )
       return
     }
 
-    const farthest = core.getBooleanInput('farthest')
-    const myToken = core.getInput('github_token')
-    const client = github.getOctokit(myToken)
+    const farthest = getBooleanInput('farthest')
+    const token = getInput('repo-token')
+    const octokit = getOctokit(token)
 
-    const milestones = await client.rest.issues.listMilestones({
+    const {data: milestones} = await octokit.rest.issues.listMilestones({
       ...repo,
       state: 'open',
       sort: 'due_on',
       direction: farthest ? 'desc' : 'asc'
     })
 
-    if (milestones.data.length === 0) {
+    if (milestones.length === 0) {
       console.log('There are no open milestones in this repo, skipping.')
       return
     }
 
     const currentDate = new Date()
-
-    for (const milestone of milestones.data) {
+    for (const milestone of milestones) {
       if (milestone.due_on && new Date(milestone.due_on) > currentDate) {
-        await client.rest.issues.update({
+        await octokit.rest.issues.update({
           ...repo,
-          issue_number: issue.number,
+          issue_number,
           milestone: milestone.number
         })
-        core.setOutput('milestone', milestone)
+        setOutput('milestone', milestone)
         return
       }
     }
   } catch (e: unknown) {
     if (e instanceof Error) {
-      core.setFailed(e.message)
+      setFailed(e.message)
     }
   }
 }
