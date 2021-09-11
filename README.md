@@ -4,22 +4,21 @@ This action adds the current or farthest due milestone to issues and pull reques
 
 
 ## Usage
-```yml
+```yaml
 # .github/workflows/add-milestone.yml
 name: Add Milestone
 on:
   issues:
-    types: [ opened ]
-    branches: [ master ]
+    types: [opened]
+    branches: [master]
   pull_request:
-    types: [ opened ]
-    branches: [ master ]
+    types: [opened]
+    branches: [master]
 jobs:
   add:
     runs-on: ubuntu-latest
     steps:
       - uses: benelan/milestone-action@v1.0.1
         with:
-          github_token: "${{ secrets.GITHUB_TOKEN }}"
           farthest: true # remove this line to add the current milestone
 ```
