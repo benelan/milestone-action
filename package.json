@@ -2,7 +2,7 @@
   "name": "milestone-action",
   "version": "1.1.0",
   "private": true,
-  "description": "A GitHub Action to automatically set the current or farthest due milestone on issues and pull requests.",
+  "description": "A GitHub Action that automatically sets the current or farthest due milestone on issues and pull requests.",
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",

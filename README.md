@@ -1,3 +1,7 @@
+<p align="center">
+  <a href="https://github.com/actions/milestone-action/actions"><img alt="milestone-action status" src="https://github.com/benelan/milestone-action/actions/workflows/test.yml/badge.svg"></a>
+</p>
+
 # Add Milestone By Due Date
 
 This action adds the current or farthest due milestone to issues and pull requests. The current milestone is the one due the soonest, excluding milestones that are past due, based on the datetime that the action is run. Here are successful test runs for [current](https://github.com/benelan/milestone-action/issues/8) and [farthest](https://github.com/benelan/milestone-action/issues/16) due milestones.
@@ -18,7 +22,7 @@ jobs:
   add:
     runs-on: ubuntu-latest
     steps:
-      - uses: benelan/milestone-action@v1.0.1
+      - uses: benelan/milestone-action@v1.1.0
         with:
           farthest: true # remove this line to add the current milestone
 ```

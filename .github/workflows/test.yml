@@ -1,11 +1,11 @@
-name: 'add-current-milestone'
+name: 'Add Milestone'
 on:
   issues:
     types: [opened]
-    branches: [ master ]
+    branches: [master]
   pull_request:
     types: [opened]
-    branches: [ master ]
+    branches: [master]
 jobs:
   add:
     runs-on: ubuntu-latest

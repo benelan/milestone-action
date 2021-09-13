@@ -6,10 +6,9 @@ branding:
   color: green
 inputs:
   repo-token:
-    description: 'Token for the repository. Defaults to ${{ github.token }}'
+    description: 'Token for the repository. Defaults to `{{ github.token }}`'
     default: ${{ github.token }}
     required: false
-
   farthest:
     description: 'Set this boolean to `true` if you want to add the milestone with the farthest due date. Defaults to `false` which adds the current milestone.'
     required: false
