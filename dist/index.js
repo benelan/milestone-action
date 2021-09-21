@@ -25,6 +25,7 @@ function run() {
             // https://github.blog/changelog/2021-02-19-github-actions-workflows-triggered-by-dependabot-prs-will-run-with-read-only-permissions/
             if (sender && sender.login === 'dependabot[bot]') {
                 console.log('Dependabot created the pull request, ending run.');
+                return;
             }
             if (action !== 'opened') {
                 console.log('No issue or pull request was opened, ending run.');
