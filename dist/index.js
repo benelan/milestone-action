@@ -21,9 +21,13 @@ const core_1 = __nccwpck_require__(186);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const { repo, payload: { action, issue, pull_request }, issue: { number: issue_number } } = github_1.context;
+            const { repo, payload: { action, sender, issue, pull_request }, issue: { number: issue_number } } = github_1.context;
+            // https://github.blog/changelog/2021-02-19-github-actions-workflows-triggered-by-dependabot-prs-will-run-with-read-only-permissions/
+            if (sender && sender.login === 'dependabot[bot]') {
+                console.log('Dependabot created the pull request, ending run.');
+            }
             if (action !== 'opened') {
-                console.log('No issue or pull request was opened, ending run');
+                console.log('No issue or pull request was opened, ending run.');
                 return;
             }
             if (!issue && !pull_request) {
@@ -39,7 +43,7 @@ function run() {
             const octokit = github_1.getOctokit(token);
             const { data: milestones } = yield octokit.rest.issues.listMilestones(Object.assign(Object.assign({}, repo), { state: 'open', sort: 'due_on', direction: farthest ? 'desc' : 'asc' }));
             if (milestones.length === 0) {
-                console.log('There are no open milestones in this repo, skipping.');
+                console.log('There are no open milestones in this repo, ending run.');
                 return;
             }
             const currentDate = new Date();

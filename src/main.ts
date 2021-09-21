@@ -5,12 +5,17 @@ async function run(): Promise<void> {
   try {
     const {
       repo,
-      payload: {action, issue, pull_request},
+      payload: {action, sender, issue, pull_request},
       issue: {number: issue_number}
     } = context
 
+    // https://github.blog/changelog/2021-02-19-github-actions-workflows-triggered-by-dependabot-prs-will-run-with-read-only-permissions/
+    if (sender && sender.login === 'dependabot[bot]') {
+      console.log('Dependabot created the pull request, ending run.')
+    }
+
     if (action !== 'opened') {
-      console.log('No issue or pull request was opened, ending run')
+      console.log('No issue or pull request was opened, ending run.')
       return
     }
 
@@ -40,7 +45,7 @@ async function run(): Promise<void> {
     })
 
     if (milestones.length === 0) {
-      console.log('There are no open milestones in this repo, skipping.')
+      console.log('There are no open milestones in this repo, ending run.')
       return
     }
 

@@ -22,7 +22,7 @@ jobs:
   add:
     runs-on: ubuntu-latest
     steps:
-      - uses: benelan/milestone-action@v1.1.0
+      - uses: benelan/milestone-action@v1.1.1
         with:
           farthest: true # remove this line to add the current milestone
 ```
