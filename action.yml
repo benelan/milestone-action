@@ -1,8 +1,8 @@
 name: 'Add Milestone By Due Date'
-description: 'Adds the current or farthest due milestone to pull requests and issues'
+description: 'Add the milestone with the current or farthest due date to pull requests and issues'
 author: 'Ben Elan'
 branding:
-  icon: git-branch
+  icon: calendar
   color: green
 inputs:
   repo-token:
