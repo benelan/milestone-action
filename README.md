@@ -29,7 +29,7 @@ jobs:
 
 
 ## Changelog
-### [1.1.1](https://github.com/benelan/need-info-action/compare/v1.1.0...v1.1.1) (2021-09-21)
+### [1.1.1](https://github.com/benelan/milestone-action/compare/v1.1.0...v1.1.1) (2021-09-21)
 
 #### Bug Fixes
 
