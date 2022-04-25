@@ -5,18 +5,13 @@ async function run(): Promise<void> {
   try {
     const {
       repo,
-      payload: {action, sender, issue, pull_request},
+      payload: {sender, issue, pull_request},
       issue: {number: issue_number}
     } = context
 
     // https://github.blog/changelog/2021-02-19-github-actions-workflows-triggered-by-dependabot-prs-will-run-with-read-only-permissions/
     if (sender && sender.login === 'dependabot[bot]') {
       console.log('Dependabot created the pull request, ending run.')
-      return
-    }
-
-    if (action !== 'opened') {
-      console.log('No issue or pull request was opened, ending run.')
       return
     }
 
@@ -62,7 +57,7 @@ async function run(): Promise<void> {
         return
       }
     }
-  } catch (e: unknown) {
+  } catch (e) {
     if (e instanceof Error) {
       setFailed(e.message)
     }
