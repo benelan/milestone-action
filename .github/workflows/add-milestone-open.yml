@@ -1,11 +1,11 @@
-name: 'Add Milestone'
+name: Add milestone on open
 on:
   issues:
     types: [opened]
-    branches: [master]
+    branches: [main]
   pull_request:
     types: [opened]
-    branches: [master]
+    branches: [main]
 jobs:
   add:
     runs-on: ubuntu-latest
