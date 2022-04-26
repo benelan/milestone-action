@@ -22,13 +22,19 @@ jobs:
   add:
     runs-on: ubuntu-latest
     steps:
-      - uses: benelan/milestone-action@v1.1.1
+      - uses: benelan/milestone-action@v1.2.0
         with:
           farthest: true # remove this line to add the current milestone
 ```
 
 
 ## Changelog
+### [1.2.0](https://github.com/benelan/milestone-action/compare/v1.1.1...v1.2.0) (2021-09-21)
+
+#### Features
+
+- Allow the workflow to run on any event action ([9bce688](https://github.com/benelan/milestone-action/commit/9bce688a0d578a791df9741db589a347e9a2b3a7))
+
 ### [1.1.1](https://github.com/benelan/milestone-action/compare/v1.1.0...v1.1.1) (2021-09-21)
 
 #### Bug Fixes
