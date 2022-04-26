@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://github.com/actions/milestone-action/actions"><img alt="milestone-action status" src="https://github.com/benelan/milestone-action/actions/workflows/test.yml/badge.svg"></a>
+  <a href="https://github.com/benelan/milestone-action/actions"><img alt="milestone-action status" src="https://github.com/benelan/milestone-action/actions/workflows/add-milestone-open.yml/badge.svg"></a>
 </p>
 
 # Add Milestone By Due Date
