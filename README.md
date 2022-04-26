@@ -36,10 +36,6 @@ jobs:
 
 - Add option to overwrite an existing milestone ([7ad020e](https://github.com/benelan/milestone-action/commit/7ad020e55e306992345b0f58631515081a21d9e4))
 
-#### Fixes
-
-- Use UTC time for the current date ([7ad020e](https://github.com/benelan/milestone-action/commit/7ad020e55e306992345b0f58631515081a21d9e4))
-
 ### [1.2.0](https://github.com/benelan/milestone-action/compare/v1.1.1...v1.2.0) (2022-04-25)
 
 #### Features
