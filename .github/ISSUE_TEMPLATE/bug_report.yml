@@ -1,0 +1,51 @@
+name: Bug
+description: Report a bug in the action
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please [check for existing issues](https://github.com/Esri/calcite-components/issues) to avoid duplicates. If someone has already opened an issue for what you are experiencing, please add a 👍 reaction to the existing issue instead of creating a new one.
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: A clear description of the issue (optionally include before/after screenshots/GIFs).
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What you expected instead, and why?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduction Steps
+      description: Clear, numbered steps for reproducing the issue using the sample provided above.
+      placeholder: |
+        1. Set ABC settings on GitHub
+        2. Run the action with XYZ
+        3. ...
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Reproduction Version
+      description: The latest version that reproduces the issue.
+      placeholder: v1.x.x
+    validations:
+      required: true
+  - type: textarea
+    id: relevant
+    attributes:
+      label: Relevant Info
+      description: OS, stack traces, related issues, suggestions/resources on how to fix, etc.
+      placeholder: |
+        `ubuntu-latest` operating system
+        ...
+    validations:
+      required: false
