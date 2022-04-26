@@ -6,8 +6,8 @@
 
 This Action adds the current milestone or the milestone with the farthest due date to issues and pull requests. The Action ignores milestones that are past due, as well as milestones with no due date. Here are successful test runs for [current](https://github.com/benelan/milestone-action/issues/8) and [farthest](https://github.com/benelan/milestone-action/issues/16) due milestones.
 
-
 ## Usage
+
 ```yaml
 # .github/workflows/add-milestone.yml
 name: Add Milestone
@@ -22,15 +22,25 @@ jobs:
   add:
     runs-on: ubuntu-latest
     steps:
-      - uses: benelan/milestone-action@v1.2.0
+      - uses: benelan/milestone-action@v1.3.0
         with:
           farthest: true # remove this line to add the current milestone
           overwrite: true # remove this line to keep an existing milestone
 ```
 
-
 ## Changelog
-### [1.2.0](https://github.com/benelan/milestone-action/compare/v1.1.1...v1.2.0) (2021-09-21)
+
+### [1.3.0](https://github.com/benelan/milestone-action/compare/v1.2.0...v1.3.0) (2022-04-26)
+
+#### Features
+
+- Add option to overwrite an existing milestone ([7ad020e](https://github.com/benelan/milestone-action/commit/7ad020e55e306992345b0f58631515081a21d9e4))
+
+#### Fixes
+
+- Use UTC time for the current date ([7ad020e](https://github.com/benelan/milestone-action/commit/7ad020e55e306992345b0f58631515081a21d9e4))
+
+### [1.2.0](https://github.com/benelan/milestone-action/compare/v1.1.1...v1.2.0) (2022-04-25)
 
 #### Features
 
@@ -38,9 +48,9 @@ jobs:
 
 ### [1.1.1](https://github.com/benelan/milestone-action/compare/v1.1.0...v1.1.1) (2021-09-21)
 
-#### Bug Fixes
+#### Fixes
 
-* skip action when the sender is dependabot, read this [blog post](https://github.blog/changelog/2021-02-19-github-actions-workflows-triggered-by-dependabot-prs-will-run-with-read-only-permissions/) for more info ([e0a0717](https://github.com/benelan/milestone-action/commit/e0a0717993fa5615919e93f8ed5d2214eb742ac5))
+- skip action when the sender is dependabot, read this [blog post](https://github.blog/changelog/2021-02-19-github-actions-workflows-triggered-by-dependabot-prs-will-run-with-read-only-permissions/) for more info ([e0a0717](https://github.com/benelan/milestone-action/commit/e0a0717993fa5615919e93f8ed5d2214eb742ac5))
 
 ### [1.1.0](https://github.com/benelan/milestone-action/compare/v1.0.0...v1.1.0) (2021-09-13)
 
