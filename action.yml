@@ -10,9 +10,13 @@ inputs:
     default: ${{ github.token }}
     required: false
   farthest:
-    description: 'Set this boolean to `true` if you want to add the milestone with the farthest due date. Defaults to `false` which adds the current milestone.'
+    description: 'Set this boolean to `true` if you want to add the milestone with the farthest due date. Defaults to `false`, which adds the current milestone.'
     required: false
-    default: false
+    default: 'false'
+  overwrite:
+    description: 'Set this boolean to `true` if you want the action to overwrite existing milestones on issues. Defaults to `false`, which ends the run if the issue already has a milestone.'
+    required: false
+    default: 'false'
 runs:
   using: 'node12'
   main: 'dist/index.js'

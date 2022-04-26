@@ -16,7 +16,7 @@ on:
     types: [opened]
     branches: [master]
   pull_request:
-    types: [opened]
+    types: [closed]
     branches: [master]
 jobs:
   add:
@@ -25,6 +25,7 @@ jobs:
       - uses: benelan/milestone-action@v1.2.0
         with:
           farthest: true # remove this line to add the current milestone
+          overwrite: true # remove this line to keep an existing milestone
 ```
 
 

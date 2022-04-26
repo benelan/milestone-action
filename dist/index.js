@@ -23,27 +23,24 @@ function run() {
         try {
             const { repo, payload: { sender, issue, pull_request }, issue: { number: issue_number } } = github_1.context;
             // https://github.blog/changelog/2021-02-19-github-actions-workflows-triggered-by-dependabot-prs-will-run-with-read-only-permissions/
-            if (sender && sender.login === 'dependabot[bot]') {
+            if ((sender === null || sender === void 0 ? void 0 : sender.login) === 'dependabot[bot]') {
                 console.log('Dependabot created the pull request, ending run.');
                 return;
             }
-            if (!issue && !pull_request) {
-                console.log('The event that triggered this action was not a pull request or issue, ending run.');
-                return;
-            }
-            if (!!(issue === null || issue === void 0 ? void 0 : issue.milestone) || !!(pull_request === null || pull_request === void 0 ? void 0 : pull_request.milestone)) {
-                console.log('The issue or pull request already has a milestone, ending run.');
-                return;
-            }
             const farthest = (0, core_1.getBooleanInput)('farthest');
+            const overwrite = (0, core_1.getBooleanInput)('overwrite');
             const token = (0, core_1.getInput)('repo-token');
             const octokit = (0, github_1.getOctokit)(token);
-            const { data: milestones } = yield octokit.rest.issues.listMilestones(Object.assign(Object.assign({}, repo), { state: 'open', sort: 'due_on', direction: farthest ? 'desc' : 'asc' }));
-            if (milestones.length === 0) {
+            if (!overwrite && ((issue === null || issue === void 0 ? void 0 : issue.milestone) || (pull_request === null || pull_request === void 0 ? void 0 : pull_request.milestone))) {
+                console.log('The `overwrite` option is not enabled and the issue or pull request already has a milestone, ending run.');
+                return;
+            }
+            const { data: milestones } = yield octokit.rest.issues.listMilestones(Object.assign(Object.assign({}, repo), { state: 'open', sort: 'due_on', per_page: 100, direction: farthest ? 'desc' : 'asc' }));
+            if (!milestones.length) {
                 console.log('There are no open milestones in this repo, ending run.');
                 return;
             }
-            const currentDate = new Date();
+            const currentDate = new Date(Date.now());
             for (const milestone of milestones) {
                 if (milestone.due_on && new Date(milestone.due_on) > currentDate) {
                     yield octokit.rest.issues.update(Object.assign(Object.assign({}, repo), { issue_number, milestone: milestone.number }));
@@ -51,6 +48,7 @@ function run() {
                     return;
                 }
             }
+            console.log('No matching milestone was found or added, ending run.');
         }
         catch (e) {
             if (e instanceof Error) {
