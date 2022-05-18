@@ -4,7 +4,7 @@
 
 # Add Milestone By Due Date
 
-This Action adds the current milestone or the milestone with the farthest due date to issues and pull requests. The Action ignores milestones with no due date and milestones that are past due. Here are successful test runs for [current](https://github.com/benelan/milestone-action/issues/8) and [farthest](https://github.com/benelan/milestone-action/issues/16) due milestones.
+This Action adds the current milestone or the milestone with the farthest due date to issues and pull requests. The Action ignores closed milestones, milestones with no due date, and milestones that are past due. Here are successful test runs for [current](https://github.com/benelan/milestone-action/issues/8) and [farthest](https://github.com/benelan/milestone-action/issues/16) due milestones.
 
 ## Usage
 
