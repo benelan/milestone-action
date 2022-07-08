@@ -22,13 +22,19 @@ jobs:
   add:
     runs-on: ubuntu-latest
     steps:
-      - uses: benelan/milestone-action@v1.3.0
+      - uses: benelan/milestone-action@v1.3.1
         with:
           farthest: true # remove this line to add the current milestone
           overwrite: true # remove this line to keep an existing milestone
 ```
 
 ## Changelog
+
+### [1.3.1](https://github.com/benelan/milestone-action/compare/v1.3.0...v1.3.1) (2022-04-26)
+
+#### Fixes
+
+- A milestone is considered current until the day after its due date. Previously it was considering the time of day when comparing the current date to a milestone's due date. ([c68adeb](https://github.com/benelan/milestone-action/commit/c68adeb50cd9b0da6549310a7d8287aa70e2ac5f))
 
 ### [1.3.0](https://github.com/benelan/milestone-action/compare/v1.2.0...v1.3.0) (2022-04-26)
 
