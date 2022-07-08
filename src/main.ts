@@ -41,6 +41,8 @@ async function run(): Promise<void> {
     }
 
     const currentDate = new Date(Date.now())
+    currentDate.setUTCHours(0, 0, 0, 0)
+
     for (const milestone of milestones) {
       if (milestone.due_on && new Date(milestone.due_on) > currentDate) {
         await octokit.rest.issues.update({
