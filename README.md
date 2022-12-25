@@ -22,13 +22,19 @@ jobs:
   add:
     runs-on: ubuntu-latest
     steps:
-      - uses: benelan/milestone-action@v1.3.1
+      - uses: benelan/milestone-action@v2
         with:
           farthest: true # remove this line to add the current milestone
           overwrite: true # remove this line to keep an existing milestone
 ```
 
 ## Changelog
+
+### [2.0.0](https://github.com/benelan/milestone-action/compare/v1.3.1...v2.0.0) (2022-12-24)
+
+#### Breaking Changes
+
+Upgraded the Node runner from the deprecated `v12` to `v16`. See this [GitHub blog post](https://github.blog/changelog/2022-09-22-github-actions-all-actions-will-begin-running-on-node16-instead-of-node12/) for more info.
 
 ### [1.3.1](https://github.com/benelan/milestone-action/compare/v1.3.0...v1.3.1) (2022-04-26)
 
