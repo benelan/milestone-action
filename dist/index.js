@@ -1,67 +1,5 @@
-require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
+/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
-
-/***/ 3109:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-"use strict";
-
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const github_1 = __nccwpck_require__(5438);
-const core_1 = __nccwpck_require__(2186);
-function run() {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const { repo, payload: { sender, issue, pull_request }, issue: { number: issue_number } } = github_1.context;
-            // https://github.blog/changelog/2021-02-19-github-actions-workflows-triggered-by-dependabot-prs-will-run-with-read-only-permissions/
-            if ((sender === null || sender === void 0 ? void 0 : sender.login) === 'dependabot[bot]') {
-                console.log('Dependabot created the pull request, ending run.');
-                return;
-            }
-            const farthest = (0, core_1.getBooleanInput)('farthest');
-            const overwrite = (0, core_1.getBooleanInput)('overwrite');
-            const token = (0, core_1.getInput)('repo-token');
-            const octokit = (0, github_1.getOctokit)(token);
-            if (!overwrite && ((issue === null || issue === void 0 ? void 0 : issue.milestone) || (pull_request === null || pull_request === void 0 ? void 0 : pull_request.milestone))) {
-                console.log('The `overwrite` option is not enabled and the issue or pull request already has a milestone, ending run.');
-                return;
-            }
-            const { data: milestones } = yield octokit.rest.issues.listMilestones(Object.assign(Object.assign({}, repo), { state: 'open', sort: 'due_on', per_page: 100, direction: farthest ? 'desc' : 'asc' }));
-            if (!milestones.length) {
-                console.log('There are no open milestones in this repo, ending run.');
-                return;
-            }
-            const currentDate = new Date(Date.now());
-            currentDate.setUTCHours(0, 0, 0, 0);
-            for (const milestone of milestones) {
-                if (milestone.due_on && new Date(milestone.due_on) > currentDate) {
-                    yield octokit.rest.issues.update(Object.assign(Object.assign({}, repo), { issue_number, milestone: milestone.number }));
-                    (0, core_1.setOutput)('milestone', milestone);
-                    return;
-                }
-            }
-            console.log('No matching milestone was found or added, ending run.');
-        }
-        catch (e) {
-            if (e instanceof Error) {
-                (0, core_1.setFailed)(e.message);
-            }
-        }
-    });
-}
-run();
-
-
-/***/ }),
 
 /***/ 7351:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
@@ -9693,6 +9631,68 @@ function wrappy (fn, cb) {
 
 /***/ }),
 
+/***/ 399:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.run = void 0;
+const github_1 = __nccwpck_require__(5438);
+const core_1 = __nccwpck_require__(2186);
+async function run() {
+    try {
+        const { repo, payload: { sender, issue, pull_request }, issue: { number: issue_number }, } = github_1.context;
+        // https://github.blog/changelog/2021-02-19-github-actions-workflows-triggered-by-dependabot-prs-will-run-with-read-only-permissions/
+        if (sender?.login === "dependabot[bot]") {
+            console.log("Dependabot created the pull request, ending run.");
+            return;
+        }
+        const farthest = (0, core_1.getBooleanInput)("farthest");
+        const overwrite = (0, core_1.getBooleanInput)("overwrite");
+        const token = (0, core_1.getInput)("repo-token");
+        const octokit = (0, github_1.getOctokit)(token);
+        if (!overwrite && (issue?.milestone || pull_request?.milestone)) {
+            console.log("The `overwrite` option is not enabled and the issue or pull request already has a milestone, ending run.");
+            return;
+        }
+        const { data: milestones } = await octokit.rest.issues.listMilestones({
+            ...repo,
+            state: "open",
+            sort: "due_on",
+            per_page: 100,
+            direction: farthest ? "desc" : "asc",
+        });
+        if (!milestones.length) {
+            console.log("There are no open milestones in this repo, ending run.");
+            return;
+        }
+        const currentDate = new Date(Date.now());
+        currentDate.setUTCHours(0, 0, 0, 0);
+        for (const milestone of milestones) {
+            if (milestone.due_on && new Date(milestone.due_on) > currentDate) {
+                await octokit.rest.issues.update({
+                    ...repo,
+                    issue_number,
+                    milestone: milestone.number,
+                });
+                (0, core_1.setOutput)("milestone", milestone);
+                return;
+            }
+        }
+        console.log("No matching milestone was found or added, ending run.");
+    }
+    catch (e) {
+        if (e instanceof Error) {
+            (0, core_1.setFailed)(e.message);
+        }
+    }
+}
+exports.run = run;
+
+
+/***/ }),
+
 /***/ 2877:
 /***/ ((module) => {
 
@@ -9867,13 +9867,21 @@ module.exports = JSON.parse('[[[0,44],"disallowed_STD3_valid"],[[45,46],"valid"]
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
 /******/ 	
 /************************************************************************/
-/******/ 	
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __nccwpck_require__(3109);
-/******/ 	module.exports = __webpack_exports__;
-/******/ 	
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+(() => {
+"use strict";
+var exports = __webpack_exports__;
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+/**
+ * The entrypoint for the action.
+ */
+const main_1 = __nccwpck_require__(399);
+(0, main_1.run)();
+
+})();
+
+module.exports = __webpack_exports__;
 /******/ })()
 ;
-//# sourceMappingURL=index.js.map
