@@ -1,5 +1,12 @@
 import { context, getOctokit } from "@actions/github";
-import { getBooleanInput, getInput, setFailed, setOutput } from "@actions/core";
+import {
+  getBooleanInput,
+  getInput,
+  setFailed,
+  setOutput,
+  notice,
+  warning,
+} from "@actions/core";
 
 export async function run(): Promise<void> {
   try {
@@ -11,20 +18,21 @@ export async function run(): Promise<void> {
 
     // https://github.blog/changelog/2021-02-19-github-actions-workflows-triggered-by-dependabot-prs-will-run-with-read-only-permissions/
     if (sender?.login === "dependabot[bot]") {
-      console.log("Dependabot created the pull request, ending run.");
-      return;
+      notice("Exit: dependabot created the pull request.");
+      process.exit(0);
     }
 
     const farthest = getBooleanInput("farthest");
     const overwrite = getBooleanInput("overwrite");
+
     const token = getInput("repo-token");
     const octokit = getOctokit(token);
 
     if (!overwrite && (issue?.milestone || pull_request?.milestone)) {
-      console.log(
-        "The `overwrite` option is not enabled and the issue or pull request already has a milestone, ending run.",
+      notice(
+        "Exit: the `overwrite` option is not enabled and the issue or pull request already has a milestone.",
       );
-      return;
+      process.exit(0);
     }
 
     const { data: milestones } = await octokit.rest.issues.listMilestones({
@@ -36,8 +44,8 @@ export async function run(): Promise<void> {
     });
 
     if (!milestones.length) {
-      console.log("There are no open milestones in this repo, ending run.");
-      return;
+      warning("Exit: there are no open milestones in this repo.");
+      process.exit(0);
     }
 
     const currentDate = new Date(Date.now());
@@ -50,14 +58,21 @@ export async function run(): Promise<void> {
           issue_number,
           milestone: milestone.number,
         });
+
+        notice(
+          `Success: the issue or pull request was added to the "${milestone.title}" milestone.`,
+        );
+
         setOutput("milestone", milestone);
-        return;
+        process.exit(0);
       }
     }
-    console.log("No matching milestone was found or added, ending run.");
+
+    notice("Exit: all open milestones are past due or do not have a due date.");
   } catch (e) {
     if (e instanceof Error) {
       setFailed(e.message);
+      process.exit(1);
     }
   }
 }
