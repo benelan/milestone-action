@@ -14,15 +14,15 @@ name: Add Milestone
 on:
   issues:
     types: [opened]
-    branches: [master]
+    branches: [main]
   pull_request:
     types: [closed]
-    branches: [master]
+    branches: [main]
 jobs:
   add:
     runs-on: ubuntu-latest
     steps:
-      - uses: benelan/milestone-action@v2
+      - uses: benelan/milestone-action@v3
         with:
           farthest: true # remove this line to add the current milestone
           overwrite: true # remove this line to keep an existing milestone
@@ -30,13 +30,31 @@ jobs:
 
 ## Changelog
 
+### [3.0.0](https://github.com/benelan/milestone-action/compare/v2.0.0...v3.0.0) (2024-01-24)
+
+#### Breaking Changes
+
+- Upgrade the Node runner to `v20`, which is the current LTS version. Node `v16`
+  reached [end of life](https://nodejs.org/en/blog/announcements/nodejs16-eol)
+  on `2023-09-11` and the GitHub runner will be deprecated this year. See this
+  [GitHub blog post](https://github.blog/changelog/2023-09-22-github-actions-transitioning-from-node-16-to-node-20/)
+  for more info.
+  ([e845696](https://github.com/benelan/milestone-action/commit/e845696b034a067c487b98502782a9c1a900edaf))
+
+#### Features
+
+- Use [GitHub Action annotations](https://github.com/actions/toolkit/tree/main/packages/core#annotations)
+  instead of `console.log`
+  ([4a7383b](https://github.com/benelan/milestone-action/commit/4a7383b3c7279110330e33a6a9762440556172e4))
+
 ### [2.0.0](https://github.com/benelan/milestone-action/compare/v1.3.1...v2.0.0) (2022-12-24)
 
 #### Breaking Changes
 
 - Upgrade the Node runner from the deprecated `v12` to `v16`. See this
-[GitHub blog post](https://github.blog/changelog/2022-09-22-github-actions-all-actions-will-begin-running-on-node16-instead-of-node12/)
-for more info.
+  [GitHub blog post](https://github.blog/changelog/2022-09-22-github-actions-all-actions-will-begin-running-on-node16-instead-of-node12/)
+  for more info
+  ([f5f6fcb](https://github.com/benelan/milestone-action/commit/f5f6fcb16cecaa3255d2a9922838b027a9422dbb))
 
 ### [1.3.1](https://github.com/benelan/milestone-action/compare/v1.3.0...v1.3.1) (2022-04-26)
 
