@@ -1,7 +1,7 @@
 name: Add milestone on open
 on:
   issues:
-    types: [opened]
+    types: [opened, reopened]
   pull_request:
     types: [opened]
     branches: [main]
@@ -9,10 +9,9 @@ jobs:
   add:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: ./
         with:
           farthest: true  # remove this line to add the current milestone
           overwrite: true # remove this line to keep an existing milestone
-          single: true    # remove this line if you have multiple milestones
-                          # open at a time and use due dates
+          single: true    # remove this line for multiple open milestones with due dates

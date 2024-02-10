@@ -40,10 +40,17 @@ jobs:
     steps:
       - uses: benelan/milestone-action@v3
         with:
-          farthest: false # if true, add the milestone with the farthest due date.
-          overwrite: true # if true, allow overwriting an existing milestone.
-          single: false   # if true, add a milestone if it's the only one open,
-                          # even if it doesn't have a due date.
+          # If true, add the milestone with the farthest due date. By default,
+          # the action adds the current milestone (closest due date).
+          farthest: false
+
+          # If true, overwrite existing milestones on issues and pull requests.
+          # By default, the action exits if a milestone has already been added.
+          overwrite: false
+
+          # If true, add the only open milestone in a repo, even if there is no
+          # due date. By default, milestones with no due date are ignored.
+          single: false
 ```
 
 ## Changelog
