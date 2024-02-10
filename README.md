@@ -60,7 +60,7 @@ jobs:
 #### Features
 
 - Add `single` option for repos that have one open milestone at a time with no
-  due date.
+  due date. ([47e7b58](https://github.com/benelan/milestone-action/commit/47e7b5865d40009a9466515a96e621c049ca9fa2))
 
 ### [3.0.0](https://github.com/benelan/milestone-action/compare/v2.0.0...v3.0.0) (2024-01-24)
 
