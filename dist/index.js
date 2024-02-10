@@ -28925,6 +28925,7 @@ async function run() {
         }
         const farthest = (0, core_1.getBooleanInput)("farthest");
         const overwrite = (0, core_1.getBooleanInput)("overwrite");
+        const single = (0, core_1.getBooleanInput)("single");
         const token = (0, core_1.getInput)("repo-token");
         const octokit = (0, github_1.getOctokit)(token);
         if (!overwrite && (issue?.milestone || pull_request?.milestone)) {
@@ -28940,6 +28941,16 @@ async function run() {
         });
         if (!milestones.length) {
             (0, core_1.warning)("Exit: there are no open milestones in this repo.");
+            process.exit(0);
+        }
+        if (single && milestones.length === 1) {
+            await octokit.rest.issues.update({
+                ...repo,
+                issue_number,
+                milestone: milestones[0].number,
+            });
+            (0, core_1.notice)(`Success: the issue or pull request was added to the "${milestones[0]?.title}" milestone.`);
+            (0, core_1.setOutput)("milestone", milestones[0]);
             process.exit(0);
         }
         const currentDate = new Date(Date.now());

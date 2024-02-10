@@ -1,22 +1,26 @@
-name: 'Add Milestone By Due Date'
-description: 'Add the milestone with the current or farthest due date to pull requests and issues'
-author: 'Ben Elan'
+name: "Add Milestone By Due Date"
+description: "Add the milestone with the current or farthest due date to pull requests and issues"
+author: "Ben Elan"
 branding:
   icon: calendar
   color: green
 inputs:
   repo-token:
-    description: 'Token for the repository. Defaults to `{{ github.token }}`'
+    description: "Token for the repository. Defaults to `{{ github.token }}`"
     default: ${{ github.token }}
     required: false
   farthest:
-    description: 'Set this boolean to `true` if you want to add the milestone with the farthest due date. Defaults to `false`, which adds the current milestone.'
+    description: "Set this boolean to `true` if you want to add the milestone with the farthest due date. Defaults to `false`, which adds the current milestone."
     required: false
-    default: 'false'
+    default: "false"
   overwrite:
-    description: 'Set this boolean to `true` if you want the action to overwrite existing milestones on issues. Defaults to `false`, which ends the run if the issue already has a milestone.'
+    description: "Set this boolean to `true` if you want the action to overwrite existing milestones on issues. Defaults to `false`, which ends the run if the issue already has a milestone."
     required: false
-    default: 'false'
+    default: "false"
+  single:
+    description: "Set this boolean to `true` if you only have a single milestone open at a time but don't set the due date. Defaults to `false`, which will not select a milestone if it doesn't have a due date, even if there is only one milestone open."
+    required: false
+    default: "false"
 runs:
-  using: 'node20'
-  main: 'dist/index.js'
+  using: "node20"
+  main: "dist/index.js"

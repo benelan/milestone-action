@@ -24,6 +24,7 @@ export async function run(): Promise<void> {
 
     const farthest = getBooleanInput("farthest");
     const overwrite = getBooleanInput("overwrite");
+    const single = getBooleanInput("single");
 
     const token = getInput("repo-token");
     const octokit = getOctokit(token);
@@ -45,6 +46,21 @@ export async function run(): Promise<void> {
 
     if (!milestones.length) {
       warning("Exit: there are no open milestones in this repo.");
+      process.exit(0);
+    }
+
+    if (single && milestones.length === 1) {
+      await octokit.rest.issues.update({
+        ...repo,
+        issue_number,
+        milestone: milestones[0].number,
+      });
+
+      notice(
+        `Success: the issue or pull request was added to the "${milestones[0]?.title}" milestone.`,
+      );
+
+      setOutput("milestone", milestones[0]);
       process.exit(0);
     }
 

@@ -24,11 +24,20 @@ jobs:
     steps:
       - uses: benelan/milestone-action@v3
         with:
-          farthest: true # remove this line to add the current milestone
-          overwrite: true # remove this line to keep an existing milestone
+          farthest: false # if true, add the milestone with the farthest due date.
+          overwrite: true # if true, allow overwriting an existing milestone.
+          single: false   # if true, add a milestone if it's the only one open, 
+                          # even if it doesn't have a due date.
 ```
 
 ## Changelog
+
+### [3.1.0](https://github.com/benelan/milestone-action/compare/v3.0.0...v3.1.0) (2024-02-10)
+
+#### Features
+
+- Add `single` option for workflows the consist of a single open milestone with
+  no due date.
 
 ### [3.0.0](https://github.com/benelan/milestone-action/compare/v2.0.0...v3.0.0) (2024-01-24)
 
