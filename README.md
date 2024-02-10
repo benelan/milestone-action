@@ -1,10 +1,27 @@
 <p align="center">
-  <a href="https://github.com/benelan/milestone-action/actions"><img alt="milestone-action status" src="https://github.com/benelan/milestone-action/actions/workflows/add-milestone-open.yml/badge.svg"></a>
+  <a href="https://github.com/benelan/milestone-action/actions">
+    <img
+      alt="milestone-action status"
+      src="https://github.com/benelan/milestone-action/actions/workflows/add-milestone-open.yml/badge.svg"
+    />
+  </a>
 </p>
 
 # Add Milestone By Due Date
 
-This Action adds the current milestone or the milestone with the farthest due date to issues and pull requests. The Action ignores closed milestones, milestones with no due date, and milestones that are past due. Here are successful test runs for [current](https://github.com/benelan/milestone-action/issues/8) and [farthest](https://github.com/benelan/milestone-action/issues/16) due milestones.
+This action adds the current milestone by due date, or the milestone with the
+farthest due date to issues and pull requests. By default, the action ignores
+closed milestones, milestones with no due date, and milestones that are past
+due. This suits repos that have multiple open milestones with different due
+dates, and a few milestones with no due dates (e.g. "backburner" and "stalled").
+
+Alternatively, enable the `single` option if your repo only has one milestone
+open at a time. When enabled, the only open milestone will be added to issues
+and pull requests, even if it doesn't have a due date.
+
+Here are successful test runs for [current](https://github.com/benelan/milestone-action/issues/8)
+and [farthest](https://github.com/benelan/milestone-action/issues/16) due
+milestones.
 
 ## Usage
 
@@ -14,7 +31,6 @@ name: Add Milestone
 on:
   issues:
     types: [opened]
-    branches: [main]
   pull_request:
     types: [closed]
     branches: [main]
@@ -26,7 +42,7 @@ jobs:
         with:
           farthest: false # if true, add the milestone with the farthest due date.
           overwrite: true # if true, allow overwriting an existing milestone.
-          single: false   # if true, add a milestone if it's the only one open, 
+          single: false   # if true, add a milestone if it's the only one open,
                           # even if it doesn't have a due date.
 ```
 
@@ -36,8 +52,8 @@ jobs:
 
 #### Features
 
-- Add `single` option for workflows the consist of a single open milestone with
-  no due date.
+- Add `single` option for repos that have one open milestone at a time with no
+  due date.
 
 ### [3.0.0](https://github.com/benelan/milestone-action/compare/v2.0.0...v3.0.0) (2024-01-24)
 
