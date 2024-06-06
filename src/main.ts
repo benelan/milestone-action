@@ -1,4 +1,5 @@
 import { context, getOctokit } from "@actions/github";
+import type { GetResponseDataTypeFromEndpointMethod } from "@octokit/types";
 import {
   getBooleanInput,
   getInput,
@@ -7,6 +8,20 @@ import {
   notice,
   warning,
 } from "@actions/core";
+import { determineMilestone } from "./utils";
+
+const farthest = getBooleanInput("farthest");
+const overwrite = getBooleanInput("overwrite");
+const single = getBooleanInput("single");
+
+const token = getInput("repo-token");
+const octokit = getOctokit(token);
+
+export type Milestones = GetResponseDataTypeFromEndpointMethod<
+  typeof octokit.rest.issues.listMilestones
+>;
+
+export type Milestone = Milestones[0];
 
 export async function run(): Promise<void> {
   try {
@@ -22,13 +37,6 @@ export async function run(): Promise<void> {
       process.exit(0);
     }
 
-    const farthest = getBooleanInput("farthest");
-    const overwrite = getBooleanInput("overwrite");
-    const single = getBooleanInput("single");
-
-    const token = getInput("repo-token");
-    const octokit = getOctokit(token);
-
     if (!overwrite && (issue?.milestone || pull_request?.milestone)) {
       notice(
         "Exit: the `overwrite` option is not enabled and the issue or pull request already has a milestone.",
@@ -36,7 +44,7 @@ export async function run(): Promise<void> {
       process.exit(0);
     }
 
-    const { data: milestones } = await octokit.rest.issues.listMilestones({
+    const response = await octokit.rest.issues.listMilestones({
       ...repo,
       state: "open",
       sort: "due_on",
@@ -44,47 +52,32 @@ export async function run(): Promise<void> {
       direction: farthest ? "desc" : "asc",
     });
 
-    if (!milestones.length) {
-      warning("Exit: there are no open milestones in this repo.");
-      process.exit(0);
-    }
+    const milestones: Milestones = response.data;
 
-    if (single && milestones.length === 1) {
+    const milestone: Milestone | undefined = determineMilestone(
+      milestones,
+      single,
+    );
+
+    if (!milestone) {
+      warning(
+        "Exit: all milestones are closed, past due, or don't have a due date.",
+      );
+    } else {
       await octokit.rest.issues.update({
         ...repo,
         issue_number,
-        milestone: milestones[0].number,
+        milestone: milestone?.number,
       });
 
       notice(
-        `Success: the issue or pull request was added to the "${milestones[0]?.title}" milestone.`,
+        `Success: the issue or pull request was added to the "${milestone?.title}" milestone.`,
       );
 
-      setOutput("milestone", milestones[0]);
-      process.exit(0);
+      setOutput("milestone", milestone);
     }
 
-    const currentDate = new Date(Date.now());
-    currentDate.setUTCHours(0, 0, 0, 0);
-
-    for (const milestone of milestones) {
-      if (milestone.due_on && new Date(milestone.due_on) > currentDate) {
-        await octokit.rest.issues.update({
-          ...repo,
-          issue_number,
-          milestone: milestone.number,
-        });
-
-        notice(
-          `Success: the issue or pull request was added to the "${milestone.title}" milestone.`,
-        );
-
-        setOutput("milestone", milestone);
-        process.exit(0);
-      }
-    }
-
-    notice("Exit: all open milestones are past due or do not have a due date.");
+    process.exit(0);
   } catch (e) {
     if (e instanceof Error) {
       setFailed(e.message);
